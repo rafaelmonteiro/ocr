@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>OCR Test</title>
-  <script src='/tesseract.js'></script>
+  <script src='https://cdn.rawgit.com/naptha/tesseract.js/a01d2a2/dist/tesseract.js'></script>
 </head>
 <body>
   <input type="file" onchange="Tesseract.recognize(this.files[0]).progress(function(data){console.log(data)}).then(function(data){console.log(data)})">
