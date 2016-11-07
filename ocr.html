@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OCR Test</title>
-  <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+<title>OCR Simple Example</title>
+<script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+<style>
+#text {
+    border: 1px solid #dadada;
+    padding: 10px;
+    margin-top: 20px;
+    min-height: 100px;
+    overflow: auto;
+}
+body {
+    font-family: sans-serif;
+    margin: 30px;
+}
+progress {
+    display: block;
+    width: 100%;
+    transition: opacity 0.5s linear;
+}
+progress[value="1"] {
+    opacity: 0.5;
+}
+</style>
 </head>
 <body>
-  <input type="file" onchange="Tesseract.recognize(this.files[0]).then(function(data){document.getElementById('text').innerHTML = data.text})">
-  <div id="text"></div>
+    <div id="status"></div>
+    <input type="file" onchange="recognizeFile(window.lastFile=this.files[0])">
+    <div id="text"></div>
+    <progress id="progress" value="0" max="1"></progress> 
 </body>
+<script type="text/javascript">    
+    function recognizeFile(file){
+        var status = document.getElementById('status');        
+        Tesseract.recognize(file).progress(function(p) {
+            status.innerHTML = p.status; 
+            if(p.status == 'recognizing text'){
+                document.getElementById('progress').value = p.progress;
+            }
+        })
+        .then(function(data){
+            status.innerHTML = '';
+            document.getElementById('text').innerHTML = '<pre>'+data.text+'</pre>';
+        });
+    }    
+</script>
 </html>
